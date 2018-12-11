@@ -16,10 +16,10 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Move();
+        
 	}
 
-    private void Move()
+    public void Move()
     {
         var deltaX = Input.GetAxis("Horizontal") * Time.deltaTime * moveSpeed;
         var newXPos = transform.position.x + deltaX;
@@ -30,4 +30,6 @@ public class PlayerMovement : MonoBehaviour {
         transform.position = new Vector2(newXPos, newYPos);
         
     }
+
+   
 }
