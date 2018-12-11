@@ -1,2 +1,3 @@
-S;"That move was good."
-C;"Are you talking to me?"
+Shari;"That move was good."
+Cheyenne;"Are you talking to me?"
+Shari; "I was talking to myself."
