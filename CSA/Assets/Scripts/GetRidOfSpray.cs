@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class GetRidOfSpray : MonoBehaviour {
 
+    [SerializeField] private GameObject spray;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(collision.gameObject);
+        if (collision == spray)
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }
