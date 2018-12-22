@@ -4,18 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour
+{
 
     [SerializeField] int hitPoints = 20;
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float health = 100f;
     [SerializeField] Image fillBar;
-    [SerializeField] GameObject sprayParticles;
-    
+    [SerializeField] GameObject enemyProj;
+
+
+    [SerializeField] float enemyProjSpeed = 5f;
+    [SerializeField] float firingPeriod = .1f;
+    [SerializeField] float secondsBetweenDestroy = .2f;
 
     Vector2 targetPos;
     Vector2 currentPos;
+    Vector3 sprayPosOffset = new Vector3(1.05f, 0, 0);
 
+    
 
     PlayerCombat player;
 
@@ -34,13 +41,15 @@ public class Enemy : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision == sprayParticles)
+        if (collision.gameObject == player)
         {
-            DecreaseOwnHealth(collision);
+            Debug.Log("fshdfjkdfhsjkdfkskjsfddkkfkjssdfj");
+            DecreasePlayerHealth(collision.gameObject);
         }
         else
         {
-            DecreasePlayerHealth(collision.gameObject);
+
+            DecreaseOwnHealth(collision.gameObject);
         }
         //DecreasePlayerHealth(collision.gameObject);
         //DecreasePlayerHealth(collision.gameObject);
@@ -52,13 +61,13 @@ public class Enemy : MonoBehaviour {
     {
         int playerhealth = player.GetPlayerHealth();
         playerhealth -= hitPoints;
-       // player.
+        // player.
     }
 
-    private void DecreaseOwnHealth(Collider2D collision)
+    private void DecreaseOwnHealth(GameObject collision)
     {
 
-        Destroy(collision.gameObject);
+        Destroy(collision);
         health -= player.GetPlayerHitPoints();
 
         fillBar.fillAmount = health / 100f;
@@ -80,8 +89,37 @@ public class Enemy : MonoBehaviour {
         targetPos = player.transform.position;
         float maxDist = moveSpeed * Time.deltaTime;
 
-       
 
+        StartCoroutine(EnemyCombat());
+       
         transform.position = Vector2.MoveTowards(currentPos, targetPos, maxDist);
     }
+
+    IEnumerator EnemyCombat()
+    {
+        while (true)
+        {
+
+            GameObject ep = Instantiate(enemyProj,
+                transform.position - sprayPosOffset,
+                Quaternion.identity) as GameObject;
+
+            ep.GetComponent<Rigidbody2D>().velocity =
+                new Vector2(-enemyProjSpeed, 0f);
+
+            yield return new WaitForSeconds(firingPeriod);
+            StartCoroutine(ParticleDestroyer(ep));
+
+
+        }
+    }
+
+
+    IEnumerator ParticleDestroyer(GameObject ep)
+    {
+
+        yield return new WaitForSeconds(secondsBetweenDestroy);
+        Destroy(ep);
+    }
+
 }

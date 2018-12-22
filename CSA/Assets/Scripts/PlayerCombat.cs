@@ -84,6 +84,11 @@ public class PlayerCombat : MonoBehaviour {
             transform.position -= moveBackPos;
             playerHealth -= enemy.GetEnemyHitPoints();
             healthText.text = playerHealth.ToString();
+
+            if (playerHealth <= 0)
+            {
+                Destroy(gameObject);
+            }
         }
         else if (collision.gameObject == healthPickup.gameObject)
         {

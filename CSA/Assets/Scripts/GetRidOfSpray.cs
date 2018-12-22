@@ -8,9 +8,8 @@ public class GetRidOfSpray : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision == spray)
-        {
-            Destroy(collision.gameObject);
-        }
+        if (collision.tag == "Enemy" || collision.tag == "spray")
+        Destroy(collision.gameObject);
+        
     }
 }
